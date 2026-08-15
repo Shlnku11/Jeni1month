@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Месяц с тобой 🤍</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blush-1:#FFEEF3;
+    --blush-2:#FFD9E4;
+    --rose:#FF9CB5;
+    --rose-deep:#E15E86;
+    --plum:#5C2E45;
+    --plum-soft:#8A5069;
+    --gold:#F4C660;
+    --glass:rgba(255,255,255,0.38);
+    --glass-strong:rgba(255,255,255,0.55);
+    --glass-border:rgba(255,255,255,0.7);
+    --shadow:0 8px 32px rgba(140,60,90,0.18);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    font-family:'Manrope',sans-serif;
+    color:var(--plum);
+    overflow:hidden;
+    background:linear-gradient(160deg,var(--blush-1),var(--blush-2) 55%,#FFE2EC 100%);
+  }
+  #app{
+    position:relative;
+    width:100%;
+    height:100dvh;
+    max-width:520px;
+    margin:0 auto;
+    overflow:hidden;
+  }
+
+  /* ===== фон: размытые розовые сферы ===== */
+  .blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(40px);
+    opacity:.55;
+    pointer-events:none;
+    animation:float-blob 14s ease-in-out infinite;
+  }
+  .blob.b1{width:260px;height:260px;background:var(--rose);top:-80px;left:-70px;animation-delay:0s;}
+  .blob.b2{width:220px;height:220px;background:var(--gold);bottom:-60px;right:-60px;opacity:.4;animation-delay:3s;}
+  .blob.b3{width:180px;height:180px;background:var(--rose-deep);bottom:20%;left:-90px;opacity:.35;animation-delay:6s;}
+  @keyframes float-blob{
+    0%,100%{transform:translateY(0) translateX(0) scale(1);}
+    50%{transform:translateY(-24px) translateX(14px) scale(1.08);}
+  }
+
+  /* ===== плавающие сердечки ===== */
+  .hearts-layer{position:absolute; inset:0; pointer-events:none; z-index:2; overflow:hidden;}
+  .fheart{
+    position:absolute;
+    bottom:-40px;
+    font-size:18px;
+    opacity:0;
+    animation:rise linear infinite;
+    filter:drop-shadow(0 2px 4px rgba(140,60,90,.25));
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(0deg); opacity:0;}
+    10%{opacity:.85;}
+    90%{opacity:.6;}
+    100%{transform:translateY(-115vh) rotate(25deg); opacity:0;}
+  }
+
+  /* ===== верхняя панель ===== */
+  .topbar{
+    position:absolute; top:0; left:0; right:0;
+    display:flex; justify-content:flex-end; gap:10px;
+    padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 0;
+    z-index:20;
+  }
+  .icon-btn{
+    width:42px; height:42px; border-radius:50%;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; cursor:pointer;
+    box-shadow:var(--shadow);
+    transition:transform .15s ease;
+  }
+  .icon-btn:active{transform:scale(0.9);}
+
+  /* ===== экраны ===== */
+  .screen{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column;
+    padding:24px;
+    z-index:5;
+    transition:opacity .6s ease, transform .6s ease;
+  }
+
+  /* --- экран 1: конверт --- */
+  #lock{
+    text-align:center;
+  }
+  .envelope-wrap{
+    width:180px; height:180px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:26px;
+    position:relative;
+  }
+  .glass-heart{
+    width:150px; height:150px;
+    border-radius:44% 44% 50% 50% / 50% 50% 40% 40%;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    box-shadow:var(--shadow), inset 0 1px 1px rgba(255,255,255,.8);
+    display:flex; align-items:center; justify-content:center;
+    font-size:56px;
+    transform:rotate(-45deg);
+    animation:pulse-heart 2.6s ease-in-out infinite;
+  }
+  .glass-heart::before,
+  .glass-heart::after{
+    content:'';
+    position:absolute;
+    width:150px; height:150px;
+    border-radius:50%;
+    background:inherit;
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px);
+  }
+  .glass-heart::before{top:-75px; left:0;}
+  .glass-heart::after{left:75px; top:0;}
+  .glass-heart span{transform:rotate(45deg); position:relative; z-index:3;}
+  @keyframes pulse-heart{
+    0%,100%{transform:rotate(-45deg) scale(1);}
+    50%{transform:rotate(-45deg) scale(1.06);}
+  }
+  .eyebrow{
+    font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--rose-deep); font-weight:700; margin-bottom:8px;
+  }
+  h1.title{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:30px;
+    line-height:1.25;
+    margin:0 0 10px;
+    color:var(--plum);
+  }
+  p.sub{
+    font-size:14.5px;
+    color:var(--plum-soft);
+    max-width:280px;
+    margin:0 0 30px;
+    line-height:1.55;
+  }
+  .btn-main{
+    padding:15px 34px;
+    border-radius:100px;
+    border:1px solid var(--glass-border);
+    background:linear-gradient(135deg, var(--rose), var(--rose-deep));
+    color:#fff;
+    font-family:'Manrope',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.02em;
+    box-shadow:0 10px 28px rgba(225,94,134,.45);
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-main:active{transform:scale(.95); box-shadow:0 6px 16px rgba(225,94,134,.4);}
+
+  /* --- экран 2: история/карточки --- */
+  #story{
+    opacity:0; pointer-events:none;
+  }
+  #story.active{opacity:1; pointer-events:auto;}
+
+  .progress-wrap{
+    width:100%; max-width:400px; height:4px;
+    background:rgba(140,60,90,.15);
+    border-radius:10px; overflow:hidden;
+    margin-bottom:16px;
+    flex-shrink:0;
+  }
+  .progress-fill{
+    height:100%; width:14%;
+    background:linear-gradient(90deg,var(--rose),var(--gold));
+    border-radius:10px;
+    transition:width .5s cubic-bezier(.4,0,.2,1);
+  }
+
+  .cards-viewport{
+    width:100%; max-width:400px; height:min(72vh,540px);
+    position:relative;
+  }
+  .card{
+    position:absolute; inset:0;
+    border-radius:28px;
+    background:var(--glass-strong);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);
+    box-shadow:var(--shadow);
+    padding:34px 26px;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    text-align:center;
+    opacity:0;
+    transform:translateX(40px) scale(.96);
+    transition:opacity .45s ease, transform .45s ease;
+    pointer-events:none;
+  }
+  .card.active{
+    opacity:1; transform:translateX(0) scale(1);
+    pointer-events:auto;
+  }
+  .card.prev{
+    opacity:0; transform:translateX(-40px) scale(.96);
+  }
+  .card .tag{
+    font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--rose-deep); margin-bottom:14px;
+  }
+  .card .emoji{font-size:38px; margin-bottom:14px; display:block; animation:emoji-pop .5s ease;}
+  @keyframes emoji-pop{
+    0%{transform:scale(.4) rotate(-10deg); opacity:0;}
+    60%{transform:scale(1.15) rotate(4deg); opacity:1;}
+    100%{transform:scale(1) rotate(0);}
+  }
+  .card h2{
+    font-family:'Playfair Display',serif;
+    font-style:italic; font-weight:600;
+    font-size:23px; line-height:1.3;
+    margin:0 0 12px;
+  }
+  .card p{
+    font-size:14.5px; line-height:1.6;
+    color:var(--plum-soft);
+    margin:0;
+  }
+  .card .signature{
+    margin-top:20px;
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-size:16px;
+    color:var(--rose-deep);
+  }
+  .heart-btn{
+    margin-top:20px;
+    width:68px; height:68px;
+    border-radius:50%;
+    border:1px solid var(--glass-border);
+    background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+    box-shadow:0 10px 26px rgba(225,94,134,.5);
+    font-size:27px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:transform .12s ease;
+    animation:heart-idle 1.8s ease-in-out infinite;
+  }
+  @keyframes heart-idle{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.06);}
+  }
+  .heart-btn:active{transform:scale(.85);}
+  .tap-counter{
+    margin-top:10px;
+    font-size:12.5px;
+    color:var(--plum-soft);
+    opacity:.85;
+    min-height:16px;
+  }
+  .secret{
+    font-size:13px;
+    color:var(--rose-deep);
+    font-weight:700;
+    line-height:1.5;
+    opacity:0;
+    max-height:0;
+    overflow:hidden;
+    transition:opacity .6s ease, max-height .6s ease, margin .6s ease;
+    margin-top:0;
+  }
+  .secret.show{opacity:1; max-height:140px; margin-top:14px;}
+  .replay-btn{
+    margin-top:16px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--rose-deep);
+    padding:9px 16px;
+    border-radius:100px;
+    border:1px solid var(--glass-border);
+    background:var(--glass);
+    cursor:pointer;
+  }
+  .replay-btn:active{transform:scale(.95);}
+
+  /* точки-индикаторы */
+  .dots{
+    display:flex; gap:8px; justify-content:center; margin-top:18px;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:rgba(140,60,90,.25);
+    transition:all .3s ease;
+  }
+  .dot.on{
+    width:20px; background:var(--rose-deep);
+  }
+  .card-counter{
+    margin-top:8px;
+    font-size:11.5px;
+    color:var(--plum-soft);
+    opacity:.7;
+    letter-spacing:.05em;
+  }
+
+  /* стрелки навигации — теперь внутри viewport, у краёв карточки */
+  .nav-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:38px; height:38px; border-radius:50%;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; color:var(--rose-deep); font-weight:800;
+    cursor:pointer; z-index:9;
+    box-shadow:var(--shadow);
+  }
+  .nav-arrow.left{left:-8px;}
+  .nav-arrow.right{right:-8px;}
+  .nav-arrow.hidden{opacity:0; pointer-events:none;}
+
+  .swipe-hint{
+    margin-top:14px; font-size:12px; color:var(--plum-soft); opacity:.7;
+    display:flex; align-items:center; gap:6px;
+    flex-shrink:0;
+  }
+
+  canvas#fx{
+    position:fixed; inset:0; z-index:50; pointer-events:none;
+  }
+
+  @media (max-height:680px){
+    .card h2{font-size:20px;}
+    .card p{font-size:13px;}
+    .glass-heart{width:120px;height:120px; font-size:44px;}
+    .glass-heart::before,.glass-heart::after{width:120px;height:120px;}
+    .glass-heart::before{top:-60px;}
+    .glass-heart::after{left:60px;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="hearts-layer" id="heartsLayer"></div>
+
+  <div class="topbar">
+    <div class="icon-btn" id="musicBtn" title="Музыка">🎼</div>
+    <div class="icon-btn" id="muteBtn" title="Звук">🔊</div>
+  </div>
+
+  <!-- ЭКРАН 1 — конверт -->
+  <div class="screen" id="lock">
+    <div class="envelope-wrap">
+      <div class="glass-heart"><span>💌</span></div>
+    </div>
+    <div class="eyebrow">Джени, тебе письмо</div>
+    <h1 class="title">Ровно месяц,<br>как ты в моей жизни</h1>
+    <p class="sub">Маленькое интерактивное поздравление специально для тебя. Нажми, чтобы открыть ✨</p>
+    <button class="btn-main" id="openBtn">Открыть письмо 💗</button>
+  </div>
+
+  <!-- ЭКРАН 2 — история -->
+  <div class="screen" id="story">
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="cards-viewport" id="cardsViewport">
+
+      <div class="card" data-i="0">
+        <div class="tag">День 30</div>
+        <span class="emoji">🌙</span>
+        <h2>Ровно месяц</h2>
+        <p>...с того дня, как в моей жизни появилась ты. Маленькая дата, а сколько всего за ней стоит.</p>
+      </div>
+
+      <div class="card" data-i="1">
+        <div class="tag">Первые дни</div>
+        <span class="emoji">✨</span>
+        <h2>С тобой было легко с самого начала</h2>
+        <p>Помню, как быстро наши разговоры перестали быть просто разговорами. С тобой не нужно было притворяться.</p>
+      </div>
+
+      <div class="card" data-i="2">
+        <div class="tag">Этот месяц</div>
+        <span class="emoji">🌸</span>
+        <h2>Столько тепла и смеха</h2>
+        <p>За этот месяц накопилось столько моментов, которые я хочу хранить очень долго — наши разговоры, шутки и всё то мелкое, что делает день хорошим.</p>
+      </div>
+
+      <div class="card" data-i="3">
+        <div class="tag">Мелочи</div>
+        <span class="emoji">☁️</span>
+        <h2>Мне нравятся именно мелочи</h2>
+        <p>Твои сообщения с утра, твой смех, то, как ты рассказываешь про свой день. Из таких мелочей и складывается что-то настоящее.</p>
+      </div>
+
+      <div class="card" data-i="4">
+        <div class="tag">Спасибо</div>
+        <span class="emoji">🤍</span>
+        <h2>За то, что ты рядом</h2>
+        <p>Спасибо за твою улыбку, твою доброту и за то, какая ты настоящая. Рядом с тобой правда легче.</p>
+      </div>
+
+      <div class="card" data-i="5">
+        <div class="tag">Дальше</div>
+        <span class="emoji">🎇</span>
+        <h2>Дальше будет только лучше</h2>
+        <p>Уверен в этом. И очень рад, что это путешествие мы проходим вместе, шаг за шагом.</p>
+      </div>
+
+      <div class="card" data-i="6">
+        <div class="tag">С месяцем знакомства</div>
+        <span class="emoji">💐</span>
+        <h2>С месяцем знакомства, Джени!</h2>
+        <p>Ты сделала этот месяц ярче, чем он был бы без тебя. Спасибо, что ты есть.</p>
+        <div class="signature">— твой Биллолиддин</div>
+        <div class="heart-btn" id="celebrateBtn">❤️</div>
+        <div class="tap-counter" id="tapCounter"></div>
+        <div class="secret" id="secretMsg">Секрет: с тобой даже обычный день кажется особенным. С месяцем, любимая 💫</div>
+        <div class="replay-btn" id="replayBtn">Посмотреть ещё раз ↺</div>
+      </div>
+
+      <div class="nav-arrow left hidden" id="prevArrow">‹</div>
+      <div class="nav-arrow right" id="nextArrow">›</div>
+    </div>
+
+    <div class="dots" id="dots"></div>
+    <div class="card-counter" id="cardCounter"></div>
+    <div class="swipe-hint">← свайпай, листай стрелками или нажимай на края карточки →</div>
+  </div>
+
+</div>
+
+<canvas id="fx"></canvas>
+
+<script>
+(function(){
+  "use strict";
+
+  function init(){
+
+  /* ================= ХЕЛПЕРЫ ================= */
+  function buzz(ms){
+    try{ if(navigator.vibrate) navigator.vibrate(ms || 12); }catch(err){}
+  }
+
+  /* ================= ЗВУК ================= */
+  let audioCtx = null;
+  let muted = false;
+  function ctx(){
+    if(!audioCtx){
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+  function tone(freq, start, dur, type, vol){
+    if(muted) return;
+    try{
+      const c = ctx();
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, c.currentTime + start);
+      gain.gain.linearRampToValueAtTime(vol || 0.12, c.currentTime + start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + start + dur);
+      osc.connect(gain).connect(c.destination);
+      osc.start(c.currentTime + start);
+      osc.stop(c.currentTime + start + dur + 0.05);
+    }catch(err){ /* звук недоступен — сайт продолжает работать без него */ }
+  }
+  function playChime(){
+    // тёплое восходящее приветствие
+    [523.25,659.25,783.99,1046.5].forEach((f,i)=> tone(f, i*0.1, .3, 'sine', .1));
+  }
+  function playPop(dir){
+    const base = dir === -1 ? 430 : 560;
+    tone(base + Math.random()*70, 0, .16, 'triangle', .1);
+    tone(base*1.6, 0.04, .14, 'sine', .06);
+  }
+  function playWhoosh(){
+    tone(220,0,.12,'sawtooth',.05);
+    tone(340,0.05,.15,'sine',.06);
+  }
+  function playCheer(){
+    // маленькая праздничная мелодия для секрета/финала
+    const notes = [523.25,659.25,783.99,880,1046.5,1318.5];
+    notes.forEach((f,i)=> tone(f, i*0.09, .28, 'triangle', .1));
+  }
+
+  document.getElementById('muteBtn').addEventListener('click', function(){
+    muted = !muted;
+    this.textContent = muted ? '🔇' : '🔊';
+    if(!muted){ try{ ctx(); }catch(err){} }
+    buzz(8);
+  });
+
+  /* ================= ФОНОВАЯ МУЗЫКА (мягкий луп) ================= */
+  let musicOn = false, musicTimer = null;
+  const musicScale = [523.25,587.33,659.25,783.99,880.00,1046.5];
+  function musicStep(){
+    if(!musicOn || muted) return;
+    const note = musicScale[Math.floor(Math.random()*musicScale.length)];
+    tone(note, 0, 1.3, 'sine', 0.045);
+    tone(note*1.5, 0.5, 1.0, 'sine', 0.02);
+  }
+  const musicBtn = document.getElementById('musicBtn');
+  musicBtn.addEventListener('click', function(){
+    musicOn = !musicOn;
+    this.textContent = musicOn ? '🎵' : '🎼';
+    buzz(8);
+    if(musicOn){
+      try{ ctx(); }catch(err){}
+      musicStep();
+      musicTimer = setInterval(musicStep, 1700);
+    } else if(musicTimer){
+      clearInterval(musicTimer);
+    }
+  });
+
+  /* ================= ПЛАВАЮЩИЕ СЕРДЕЧКИ (фон) ================= */
+  const heartsLayer = document.getElementById('heartsLayer');
+  const heartEmojis = ['💗','💕','🩷','✨','🌸'];
+  function spawnFloatingHeart(){
+    if(!heartsLayer) return;
+    const el = document.createElement('div');
+    el.className = 'fheart';
+    el.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+    el.style.left = (Math.random()*94 + 2) + '%';
+    el.style.fontSize = (14 + Math.random()*16) + 'px';
+    const dur = 8 + Math.random()*7;
+    el.style.animationDuration = dur + 's';
+    heartsLayer.appendChild(el);
+    setTimeout(()=> el.remove(), dur*1000 + 200);
+  }
+  setInterval(spawnFloatingHeart, 900);
+  for(let i=0;i<5;i++) setTimeout(spawnFloatingHeart, i*300);
+
+  /* ================= CANVAS: ИСКРЫ / КОНФЕТТИ / САЛЮТ ================= */
+  const canvas = document.getElementById('fx');
+  const g = canvas ? canvas.getContext('2d') : null;
+  function resize(){
+    if(!canvas || !g) return;
+    canvas.width = innerWidth * devicePixelRatio;
+    canvas.height = innerHeight * devicePixelRatio;
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    g.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  }
+  resize();
+  addEventListener('resize', resize);
+
+  const palette = ['#FF9CB5','#E15E86','#F4C660','#FFFFFF','#FFD1DE'];
+
+  /* --- фоновые искры, тихая амбиентная анимация --- */
+  let sparkles = [];
+  function spawnSparkle(){
+    sparkles.push({
+      x: Math.random()*innerWidth,
+      y: Math.random()*innerHeight,
+      r: 0.8 + Math.random()*1.6,
+      life: 0,
+      maxLife: 110 + Math.random()*90,
+      vy: -0.12 - Math.random()*0.18
+    });
+  }
+  setInterval(spawnSparkle, 260);
+
+  /* --- конфетти / салют --- */
+  let particles = [];
+
+  function drawHeartShape(size){
+    const s = size;
+    g.beginPath();
+    g.moveTo(0, s*0.3);
+    g.bezierCurveTo(0,0, -s/2,0, -s/2, s*0.3);
+    g.bezierCurveTo(-s/2, s*0.7, 0, s*0.9, 0, s*1.1);
+    g.bezierCurveTo(0, s*0.9, s/2, s*0.7, s/2, s*0.3);
+    g.bezierCurveTo(s/2,0, 0,0, 0, s*0.3);
+    g.closePath();
+    g.fill();
+  }
+  function drawStarShape(size){
+    const spikes = 5, outer = size, inner = size/2.3;
+    let rot = Math.PI/2*3;
+    const step = Math.PI/spikes;
+    g.beginPath();
+    g.moveTo(0,-outer);
+    for(let i=0;i<spikes;i++){
+      g.lineTo(Math.cos(rot)*outer, Math.sin(rot)*outer); rot += step;
+      g.lineTo(Math.cos(rot)*inner, Math.sin(rot)*inner); rot += step;
+    }
+    g.closePath();
+    g.fill();
+  }
+
+  function burstConfetti(x, y, count){
+    count = count || 60;
+    const shapes = ['rect','circle','heart','star'];
+    for(let i=0;i<count;i++){
+      const angle = Math.random()*Math.PI*2;
+      const speed = 2 + Math.random()*6;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle)*speed,
+        vy: Math.sin(angle)*speed - 2,
+        gravity: 0.13 + Math.random()*0.05,
+        size: 4 + Math.random()*6,
+        color: palette[Math.floor(Math.random()*palette.length)],
+        rot: Math.random()*360,
+        vr: (Math.random()-.5)*12,
+        life: 0,
+        maxLife: 70 + Math.random()*45,
+        shape: shapes[Math.floor(Math.random()*shapes.length)]
+      });
+    }
+  }
+
+  function fallingConfetti(x, count){
+    count = count || 6;
+    const shapes = ['rect','circle','heart','star'];
+    for(let i=0;i<count;i++){
+      particles.push({
+        x: x + (Math.random()-.5)*40,
+        y: -10,
+        vx: (Math.random()-.5)*1.2,
+        vy: 1 + Math.random()*1.5,
+        gravity: 0.03 + Math.random()*0.02,
+        size: 5 + Math.random()*6,
+        color: palette[Math.floor(Math.random()*palette.length)],
+        rot: Math.random()*360,
+        vr: (Math.random()-.5)*8,
+        life: 0,
+        maxLife: 160 + Math.random()*60,
+        shape: shapes[Math.floor(Math.random()*shapes.length)]
+      });
+    }
+  }
+
+  function salute(x, y){
+    playWhoosh();
+    const targetY = y;
+    const rocket = { x, y: innerHeight + 20 };
+    const speed = 9;
+    function step(){
+      rocket.y -= speed;
+      g.beginPath();
+      g.fillStyle = '#F4C660';
+      g.arc(rocket.x, rocket.y, 2.5, 0, Math.PI*2);
+      g.fill();
+      if(rocket.y > targetY){
+        requestAnimationFrame(step);
+      } else {
+        burstConfetti(rocket.x, rocket.y, 90);
+        playPop(1);
+      }
+    }
+    step();
+  }
+
+  function loop(){
+    if(!g){ requestAnimationFrame(loop); return; }
+    g.clearRect(0,0,innerWidth,innerHeight);
+
+    // амбиентные искры
+    sparkles.forEach(s=>{
+      s.life++;
+      s.y += s.vy;
+      const progress = s.life / s.maxLife;
+      const alpha = Math.sin(progress*Math.PI) * 0.55;
+      g.save();
+      g.globalAlpha = Math.max(0, alpha);
+      g.fillStyle = '#FFFFFF';
+      g.beginPath();
+      g.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      g.fill();
+      g.restore();
+    });
+    sparkles = sparkles.filter(s => s.life < s.maxLife);
+
+    // конфетти / салют / дождь
+    particles.forEach(p=>{
+      p.life++;
+      p.vy += p.gravity;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      const alpha = Math.max(0, 1 - p.life/p.maxLife);
+      g.save();
+      g.translate(p.x,p.y);
+      g.rotate(p.rot*Math.PI/180);
+      g.globalAlpha = alpha;
+      g.fillStyle = p.color;
+      if(p.shape === 'rect'){
+        g.fillRect(-p.size/2, -p.size/3, p.size, p.size*0.6);
+      } else if(p.shape === 'heart'){
+        drawHeartShape(p.size*0.55);
+      } else if(p.shape === 'star'){
+        drawStarShape(p.size*0.55);
+      } else {
+        g.beginPath();
+        g.arc(0,0,p.size/2,0,Math.PI*2);
+        g.fill();
+      }
+      g.restore();
+    });
+    particles = particles.filter(p => p.life < p.maxLife);
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  function bigCelebration(){
+    const w = innerWidth, h = innerHeight;
+    burstConfetti(w*0.5, h*0.35, 80);
+    setTimeout(()=> salute(w*0.25, h*0.3), 180);
+    setTimeout(()=> salute(w*0.75, h*0.28), 420);
+    setTimeout(()=> salute(w*0.5, h*0.22), 700);
+  }
+
+  function goldRain(){
+    let count = 0;
+    const timer = setInterval(()=>{
+      fallingConfetti(Math.random()*innerWidth, 5);
+      count++;
+      if(count > 16) clearInterval(timer);
+    }, 90);
+  }
+
+  function grandFinale(){
+    playCheer();
+    const w = innerWidth, h = innerHeight;
+    [0,220,440,660,880].forEach((delay,i)=>{
+      setTimeout(()=> salute(w*(0.15+i*0.18), h*(0.18+Math.random()*0.12)), delay);
+    });
+    goldRain();
+    buzz([20,40,20,40,60]);
+  }
+
+  /* ================= ЭКРАН 1 → 2 ================= */
+  const lock = document.getElementById('lock');
+  const story = document.getElementById('story');
+  function openLetter(){
+    if(!lock || !story) return;
+    // визуальный переход — срабатывает в любом случае
+    lock.style.opacity = '0';
+    lock.style.transform = 'scale(1.05)';
+    setTimeout(()=>{
+      lock.style.display = 'none';
+      story.classList.add('active');
+    }, 500);
+    // звук и конфетти — best effort, ничего не блокируют
+    try{ ctx(); playChime(); }catch(err){}
+    try{ bigCelebration(); }catch(err){}
+    buzz(16);
+  }
+  const openBtn = document.getElementById('openBtn');
+  let opened = false;
+  function handleOpen(e){
+    if(opened) return;
+    opened = true;
+    if(e) e.preventDefault();
+    openLetter();
+  }
+  if(openBtn){
+    openBtn.addEventListener('click', handleOpen);
+    openBtn.addEventListener('touchend', handleOpen, {passive:false});
+  }
+
+  /* ================= КАРТОЧКИ / СВАЙП ================= */
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const dotsWrap = document.getElementById('dots');
+  const prevArrow = document.getElementById('prevArrow');
+  const nextArrow = document.getElementById('nextArrow');
+  const progressFill = document.getElementById('progressFill');
+  const cardCounter = document.getElementById('cardCounter');
+  let current = 0;
+
+  cards.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===0 ? ' on' : '');
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function render(prevIndex){
+    cards.forEach((c,i)=>{
+      c.classList.remove('active','prev');
+      if(i === current) c.classList.add('active');
+      else if(i === prevIndex && prevIndex < current) c.classList.add('prev');
+    });
+    dots.forEach((d,i)=> d.classList.toggle('on', i===current));
+    if(prevArrow) prevArrow.classList.toggle('hidden', current === 0);
+    if(nextArrow) nextArrow.classList.toggle('hidden', current === cards.length-1);
+    if(progressFill) progressFill.style.width = (((current+1)/cards.length)*100) + '%';
+    if(cardCounter) cardCounter.textContent = (current+1) + ' из ' + cards.length;
+  }
+  if(cards.length) render(-1);
+
+  function goTo(idx){
+    if(idx < 0 || idx > cards.length-1) return;
+    const prevIndex = current;
+    current = idx;
+    render(prevIndex);
+    if(current !== prevIndex){
+      playPop(current > prevIndex ? 1 : -1);
+      buzz(10);
+    }
+  }
+  if(prevArrow) prevArrow.addEventListener('click', ()=> goTo(current-1));
+  if(nextArrow) nextArrow.addEventListener('click', ()=> goTo(current+1));
+
+  const viewport = document.getElementById('cardsViewport');
+  let touchStartX = 0, touchDeltaX = 0;
+  if(viewport){
+    viewport.addEventListener('touchstart', e=>{
+      touchStartX = e.touches[0].clientX;
+      touchDeltaX = 0;
+    }, {passive:true});
+    viewport.addEventListener('touchmove', e=>{
+      touchDeltaX = e.touches[0].clientX - touchStartX;
+    }, {passive:true});
+    viewport.addEventListener('touchend', ()=>{
+      if(touchDeltaX > 45) goTo(current-1);
+      else if(touchDeltaX < -45) goTo(current+1);
+      touchDeltaX = 0;
+    });
+  }
+  document.addEventListener('keydown', e=>{
+    if(!story.classList.contains('active')) return;
+    if(e.key === 'ArrowRight') goTo(current+1);
+    if(e.key === 'ArrowLeft') goTo(current-1);
+  });
+
+  /* тап по самой карточке (не по интерактивным элементам) тоже листает */
+  const NON_NAV_SELECTOR = '.heart-btn, .replay-btn, .secret, #celebrateBtn, #replayBtn';
+  cards.forEach(c=>{
+    c.addEventListener('click', (e)=>{
+      if(e.target.closest(NON_NAV_SELECTOR)) return;
+      if(Math.abs(touchDeltaX) > 10) return; // не листаем повторно после свайпа
+      const rect = c.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      if(x > rect.width*0.6) goTo(current+1);
+      else if(x < rect.width*0.4) goTo(current-1);
+    });
+  });
+
+  /* ================= ФИНАЛЬНАЯ КАРТОЧКА: СЕРДЦЕ + СЕКРЕТ ================= */
+  let taps = 0;
+  let secretRevealed = false;
+  const SECRET_AT = 8;
+  const tapCounter = document.getElementById('tapCounter');
+  const secretMsg = document.getElementById('secretMsg');
+  const phrases = ['С месяцем!','Ты лучшая ✨','Ещё раз? 💗','Люблю такие моменты','Джени 🤍','Продолжай 👀'];
+
+  const celebrateBtn = document.getElementById('celebrateBtn');
+  if(celebrateBtn) celebrateBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    burstConfetti(rect.left+rect.width/2, rect.top+rect.height/2, 46);
+    playPop(1);
+    buzz(12);
+    taps++;
+
+    if(!secretRevealed && taps >= SECRET_AT){
+      secretRevealed = true;
+      if(secretMsg) secretMsg.classList.add('show');
+      if(tapCounter) tapCounter.textContent = 'Ты нашла секрет 💫';
+      try{ grandFinale(); }catch(err){}
+    } else if(!secretRevealed && tapCounter){
+      tapCounter.textContent = phrases[taps % phrases.length] + '  ·  ' + taps + '/' + SECRET_AT;
+    }
+
+    e.currentTarget.style.transform = 'scale(1.15)';
+    setTimeout(()=> e.currentTarget.style.transform = '', 140);
+  });
+
+  const replayBtn = document.getElementById('replayBtn');
+  if(replayBtn) replayBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    goTo(0);
+    taps = 0;
+    secretRevealed = false;
+    if(secretMsg) secretMsg.classList.remove('show');
+    if(tapCounter) tapCounter.textContent = '';
+    buzz(10);
+  });
+
+  } // конец init()
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
